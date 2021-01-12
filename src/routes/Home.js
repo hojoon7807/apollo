@@ -6,9 +6,10 @@ import Movie from '../components/Movie';
 
 const getMovies = gql`
 {
-  movies(limit:20 rating:8){
+  movies{
     id
     medium_cover_image
+    isLiked @client
   }
 } 
 `
@@ -51,20 +52,20 @@ const Movies = styled.div`
   top: -50px;
 `;
 export default () => {
-    const { loading, error, data } = useQuery(getMovies);
-    console.log(loading, data)
-    return (<Container>
-        <Header>
-            <Title>Apollo</Title>
-            <Subtitle>Study</Subtitle>
-        </Header>
-        {loading && <Loading>loading...</Loading>}
-        {!loading && data.movies && (
-            <Movies>
-                {data.movies.map(m => (
-                    <Movie key={m.id} id={m.id} bg={m.medium_cover_image} />
-                ))}
-            </Movies>
-        )}
-    </Container>)
+  const { loading, error, data } = useQuery(getMovies);
+  console.log(loading, data)
+  return (<Container>
+    <Header>
+      <Title>Apollo</Title>
+      <Subtitle>Study</Subtitle>
+    </Header>
+    {loading && <Loading>loading...</Loading>}
+    {!loading && data.movies && (
+      <Movies>
+        {data.movies.map(m => (
+          <Movie isLiked={m.isLiked} key={m.id} id={m.id} bg={m.medium_cover_image} />
+        ))}
+      </Movies>
+    )}
+  </Container>)
 }

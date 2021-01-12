@@ -6,11 +6,17 @@ import styled from "styled-components";
 const GET_MOVIE = gql`
     query getMovie($id:Int!){
         movie(id:$id){
+            id
             title
             language
             rating
             medium_cover_image
             description_intro
+        }
+        suggestions(id:$id){
+            id
+            title
+            medium_cover_image
         }
     }`
 
@@ -60,20 +66,16 @@ export default function Detail() {
     })
 
     console.log(data, loading)
-    console.log(id)
     return (
         <Container>
             <Column>
                 <Title>{loading ? "loading..." : data.movie.title}</Title>
-                {!loading && data.movie && (
-                    <>
-                        <Subtitle>{data.movie.language} ' {data.movie.rating}</Subtitle>
-                        <Description>{data.movie.description_intro}</Description>
-                    </>
-                )}
+                <Subtitle>{data?.movie?.language}  {data?.movie?.rating}</Subtitle>
+                <Description>{data?.movie?.description_intro}</Description>
+                {/* optional chaining */}
 
             </Column>
-            <Poster bg={data && data.movie ? data.movie.medium_cover_image : ""}></Poster>
+            <Poster bg={data?.movie?.medium_cover_image}></Poster>
         </Container>
     );
 }
